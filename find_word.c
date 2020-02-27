@@ -11,7 +11,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <ncurses.h>
 
 int my_strlen(char const *str)
 {
