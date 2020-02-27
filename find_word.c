@@ -20,21 +20,9 @@ int my_strlen(char const *str)
     return (i);
 }
 
-int get_size(char *filepath)
-{
-    int size = 0;
-    struct stat *memory = NULL;
-
-    memory = malloc(sizeof(struct stat));
-    stat(filepath, memory);
-    size = memory->st_size;
-    free(memory);
-    return (size);
-}
-
 char *read_map(char *filepath)
 {
-    int size = get_size(filepath);
+    int size = 5000000;
     char *buffer = NULL;
     int fd = open(filepath, O_RDONLY);
 
@@ -66,6 +54,47 @@ char **str_to_world_array(int *a, char *buffer)
     }
     a_position[k] = NULL;
     return (a_position);
+}
+
+char *my_strcpy(char *dest, char *src)
+{
+    int i = 0;
+
+    for (; src[i] != '\0'; i++)
+        dest[i] = src[i];
+    dest[i] = '\0';
+    return (dest);
+}
+
+char *my_strdup(char *str)
+{
+    int len = my_strlen(str) + 1;
+
+    char *newstr = malloc(sizeof(char) * len);
+    if (newstr == NULL)
+        return (NULL);
+    newstr = my_strcpy(newstr, str);
+    newstr[len - 1] = '\0';
+    return (newstr);
+}
+
+int is_same_word(char *str1, char *str2, int size)
+{
+    int counter = 0;
+
+    for (int i = 0; i < size; i++){
+        for (int j = 0; j < size; j++){
+            if (str1[j] != '%' && str2[i] != '%' && str1[j] == str2[i]){
+                str1[j] = '%';
+                str2[i] = '%';
+            }
+        }
+    }
+    for (int i = 0; i < size; i++){
+        if (str1[i] != '%')
+            return (0);
+    }
+    return (1);
 }
 
 int get_size_line(char *map)
@@ -118,6 +147,8 @@ int sort_word(char *line_parsed, char *name)
 int compare_name(char **line_parsed, char *name)
 {
     int i = 0, a = 0, j = 0, size = 0;
+    char *save = NULL, *save2 = NULL;
+    int word_size = my_strlen(name);
 
     while (line_parsed[a] != NULL) {
         size = my_strlen(line_parsed[a]);
@@ -125,8 +156,12 @@ int compare_name(char **line_parsed, char *name)
             if (my_strlen(name) != my_strlen(line_parsed[a] + 1))
                 break;
             if (sort_word(line_parsed[a], name) == 0) {
-                j++;
-                printf("%s\n", line_parsed[a]);
+                save = my_strdup(line_parsed[a]);
+                save2 = my_strdup(name);
+                if (is_same_word(save, save2, word_size)) {
+                    j++;
+                    printf("%s\n", line_parsed[a]);
+                }
                 break;
             }
             else
