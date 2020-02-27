@@ -102,9 +102,13 @@ int sort_word(char *line_parsed, char *name)
     int a = 0;
 
     while (line_parsed[i+1] != '\0') {
+        if (line_parsed[i] < 97)
+            line_parsed[i] = line_parsed[i] + 32;
         while (line_parsed[i] != name[a]) {
             if (name[a] == '\0')
                 return (1);
+            if (name[a] < 97)
+                name[a] = name[a] + 32;
             a++;
         }
         if (line_parsed[i] == name[a]) {
