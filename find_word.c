@@ -46,24 +46,10 @@ char *read_map(char *filepath)
     return (buffer);
 }
 
-int my_strcmp(char *s1, char *s2, int size)
-{
-    int i;
-
-    i = 0;
-    while (s1[i] == s2[i] && s1[i] && s2[i] && size > i)
-        i = i + 1;
-    if (s1[i] == '\0' && s2[i] == '\0')
-        return (0);
-    else
-        return (s1[i] - s2[i]);
-}
-
 char **str_to_world_array(int *a, char *buffer)
 {
     int k = 0, i = 0, r = 0;
-    char **a_position = NULL;
-    char *temp = NULL;
+    char **a_position = NULL, *temp = NULL;
 
     a_position = malloc(sizeof(char * ) * *a + 1);
     while (r < *a) {
@@ -84,8 +70,7 @@ char **str_to_world_array(int *a, char *buffer)
 
 int get_size_line(char *map)
 {
-    static int i = 0;
-    int a = 0;
+    int i = 0, a = 0;
 
     while (map[i] != '\0') {
         if (map[i] == '\n')
@@ -97,8 +82,7 @@ int get_size_line(char *map)
 
 int sort_word(char *line_parsed, char *name)
 {
-    int i = 0;
-    int a = 0;
+    int i = 0, a = 0;
 
     while (line_parsed[i+1] != '\0') {
         if (line_parsed[i] < 97)
@@ -133,10 +117,7 @@ int sort_word(char *line_parsed, char *name)
 
 int compare_name(char **line_parsed, char *name)
 {
-    int i = 0;
-    int a = 0;
-    int j = 0;
-    int size = 0;
+    int i = 0, a = 0, j = 0, size = 0;
 
     while (line_parsed[a] != NULL) {
         size = my_strlen(line_parsed[a]);
@@ -145,7 +126,7 @@ int compare_name(char **line_parsed, char *name)
                 break;
             if (sort_word(line_parsed[a], name) == 0) {
                 j++;
-                printf("name : %s\n", line_parsed[a]);
+                printf("%s\n", line_parsed[a]);
                 break;
             }
             else
@@ -161,9 +142,8 @@ int compare_name(char **line_parsed, char *name)
 
 int brute_force(char *map, char *name)
 {
-    int i = 0;
+    int i = get_size_line(map);
     char **arg_parsed = NULL;
-    i = get_size_line(map);
 
     while (1) {
         arg_parsed = str_to_world_array(&i, map);
@@ -171,6 +151,7 @@ int brute_force(char *map, char *name)
             return (0);
         break;
     }
+    return (0);
 }
 
 void help()
